@@ -3,43 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="index.css">
   <title>Dynamic Table Generator</title>
   <style>
-    /* Estilo para a tabela */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    
-    /* Estilo para as células da tabela */
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      text-align: left;
-    }
-    
-    /* Estilo para as células do cabeçalho da tabela */
-    th {
-      background-color: #f2f2f2;
+    /* Estilo para o corpo da página */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
     }
 
     /* Estilo para o formulário */
     form {
       max-width: 500px;
-      margin: 20px auto;
+      margin: 0 auto;
       padding: 20px;
       border: 1px solid #ccc;
       border-radius: 4px;
-      background-color: #fff;
+      background-color: #f9f9f9;
     }
 
     /* Estilo para os campos do formulário */
-    form div {
-      margin-bottom: 10px;
-    }
-
     label {
       display: block;
       margin-bottom: 6px;
@@ -54,7 +37,8 @@
     input[type="url"],
     input[type="color"],
     input[type="password"],
-    textarea {
+    textarea,
+    select {
       width: calc(100% - 12px);
       padding: 12px;
       margin-top: 6px;
@@ -79,77 +63,112 @@
     button[type="submit"]:hover {
       background-color: #45a049;
     }
+
+    /* Estilo para a tabela */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    /* Estilo para as células da tabela */
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    /* Estilo para as células do cabeçalho da tabela */
+    th {
+      background-color: #f2f2f2;
+    }
+
+    /* Estilo para a mensagem de feedback */
+    .feedback-message {
+      margin-top: 20px;
+      padding: 10px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    .success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    .error {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
   </style>
 </head>
 <body>
   <form id="data-form">
     <div>
-      <label for="name">Name</label>
+      <label for="name">Name:</label>
       <input type="text" name="name" id="name" required>
     </div>
     <div>
-      <label for="email">Email</label>
+      <label for="email">Email:</label>
       <input type="email" name="email" id="email" required>
     </div>
     <div>
-      <label for="age">Age</label>
+      <label for="age">Age:</label>
       <input type="number" name="age" id="age" min="1" max="200" step="5">
     </div>
     <div>
-      <label for="birthdate">Birthdate</label>
+      <label for="birthdate">Birthdate:</label>
       <input type="date" name="birthdate" id="birthdate" min="2019-06-10">
     </div>
     <div>
-      Favorite Food
+      Favorite Food:
       <div>
-        <label for="banana">Banana</label>
         <input type="checkbox" name="favoriteFood" value="Banana" id="banana">
+        <label for="banana">Banana</label>
       </div>
       <div>
-        <label for="apple">Apple</label>
         <input type="checkbox" name="favoriteFood" value="Apple" id="apple">
+        <label for="apple">Apple</label>
       </div>
     </div>
     <div>
-      Gender
+      Gender:
       <div>
-        <label for="male">Male</label>
         <input type="radio" name="gender" id="male" value="Male">
+        <label for="male">Male</label>
       </div>
       <div>
-        <label for="female">Female</label>
         <input type="radio" name="gender" id="female" value="Female">
+        <label for="female">Female</label>
       </div>
     </div>
     <div>
-      <label for="eyeColor">Eye Color</label>
+      <label for="eyeColor">Eye Color:</label>
       <select name="eyeColor" id="eyeColor" multiple>
         <option value="Green">Green</option>
         <option value="Red">Red</option>
       </select>
     </div>
     <div>
-      <label for="bio">Bio</label>
+      <label for="bio">Bio:</label>
       <textarea id="bio" name="bio"></textarea>
     </div>
     <input type="hidden" name="hidden" value="hi">
     <div>
-      <label for="phone">Phone</label>
+      <label for="phone">Phone:</label>
       <input type="tel" name="phone" id="phone">
     </div>
     <div>
-      <label for="url">URL</label>
+      <label for="url">URL:</label>
       <input type="url" name="url" id="url">
     </div>
     <div>
-      <label for="color">Color</label>
+      <label for="color">Color:</label>
       <input type="color" name="color" id="color">
     </div>
     <div>
-      <label>
-        Password
-        <input type="password" name="password" required>
-      </label>
+      <label>Password:</label>
+      <input type="password" name="password" required>
     </div>
     <button type="submit">Submit</button>
   </form>
@@ -175,27 +194,45 @@
     </tbody>
   </table>
 
+  <div id="feedback" class="feedback-message" style="display: none;"></div>
+
   <script>
-    // Função para capturar os dados do formulário e gerar a tabela
-    document.getElementById('data-form').addEventListener('submit', function(event) {
+    var form = document.getElementById('data-form');
+    var feedback = document.getElementById('feedback');
+
+    form.addEventListener('submit', function(event) {
       event.preventDefault(); // Impede o envio do formulário
-      
-      var form = this;
+
+      // Validação do formulário
+      if (!form.checkValidity()) {
+        return; // Sai da função se o formulário for inválido
+      }
+
+      // Captura dos dados do formulário
+      var formData = new FormData(form);
+      var formValues = {};
+      formData.forEach(function(value, key) {
+        formValues[key] = value;
+      });
+
+      // Adição dos dados na tabela
       var tableBody = document.querySelector('#results-table tbody');
       var newRow = tableBody.insertRow();
-      
-      // Adiciona as células com os valores dos campos do formulário
-      newRow.insertCell().textContent = form.name.value;
-      newRow.insertCell().textContent = form.email.value;
-      newRow.insertCell().textContent = form.age.value;
-      newRow.insertCell().textContent = form.birthdate.value;
-      newRow.insertCell().textContent = Array.from(form.querySelectorAll('input[name="favoriteFood"]:checked')).map(checkbox => checkbox.value).join(', ');
-      newRow.insertCell().textContent = form.querySelector('input[name="gender"]:checked').value;
-      newRow.insertCell().textContent = Array.from(form.eyeColor.selectedOptions).map(option => option.value).join(', ');
-      newRow.insertCell().textContent = form.bio.value;
-      newRow.insertCell().textContent = form.phone.value;
-      newRow.insertCell().textContent = form.url.value;
-      newRow.insertCell().textContent = form.color.value;
+      Object.values(formValues).forEach(function(value) {
+        var cell = newRow.insertCell();
+        cell.textContent = value;
+      });
+
+      // Limpeza do formulário
+      form.reset();
+
+      // Feedback visual
+      feedback.textContent = 'Form submitted successfully!';
+      feedback.className = 'feedback-message success';
+      feedback.style.display = 'block';
+      setTimeout(function() {
+        feedback.style.display = 'none';
+      }, 3000); // Esconde o feedback após 3 segundos
     });
   </script>
 </body>
