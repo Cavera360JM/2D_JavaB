@@ -3,9 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Results</title>
-  <link rel="stylesheet" href="index.css">
-  <link rel="icon" type="image/x-icon" href="emblema.png">
+  <title>Dynamic Table Generator</title>
   <style>
     /* Estilo para a tabela */
     table {
@@ -25,9 +23,136 @@
     th {
       background-color: #f2f2f2;
     }
+
+    /* Estilo para o formulário */
+    form {
+      max-width: 500px;
+      margin: 20px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #fff;
+    }
+
+    /* Estilo para os campos do formulário */
+    form div {
+      margin-bottom: 10px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      color: #555;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    input[type="date"],
+    input[type="tel"],
+    input[type="url"],
+    input[type="color"],
+    input[type="password"],
+    textarea {
+      width: calc(100% - 12px);
+      padding: 12px;
+      margin-top: 6px;
+      margin-bottom: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      box-sizing: border-box;
+      background-color: #4caf50;
+      color: white;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #45a049;
+    }
   </style>
 </head>
 <body>
+  <form id="data-form">
+    <div>
+      <label for="name">Name</label>
+      <input type="text" name="name" id="name" required>
+    </div>
+    <div>
+      <label for="email">Email</label>
+      <input type="email" name="email" id="email" required>
+    </div>
+    <div>
+      <label for="age">Age</label>
+      <input type="number" name="age" id="age" min="1" max="200" step="5">
+    </div>
+    <div>
+      <label for="birthdate">Birthdate</label>
+      <input type="date" name="birthdate" id="birthdate" min="2019-06-10">
+    </div>
+    <div>
+      Favorite Food
+      <div>
+        <label for="banana">Banana</label>
+        <input type="checkbox" name="favoriteFood" value="Banana" id="banana">
+      </div>
+      <div>
+        <label for="apple">Apple</label>
+        <input type="checkbox" name="favoriteFood" value="Apple" id="apple">
+      </div>
+    </div>
+    <div>
+      Gender
+      <div>
+        <label for="male">Male</label>
+        <input type="radio" name="gender" id="male" value="Male">
+      </div>
+      <div>
+        <label for="female">Female</label>
+        <input type="radio" name="gender" id="female" value="Female">
+      </div>
+    </div>
+    <div>
+      <label for="eyeColor">Eye Color</label>
+      <select name="eyeColor" id="eyeColor" multiple>
+        <option value="Green">Green</option>
+        <option value="Red">Red</option>
+      </select>
+    </div>
+    <div>
+      <label for="bio">Bio</label>
+      <textarea id="bio" name="bio"></textarea>
+    </div>
+    <input type="hidden" name="hidden" value="hi">
+    <div>
+      <label for="phone">Phone</label>
+      <input type="tel" name="phone" id="phone">
+    </div>
+    <div>
+      <label for="url">URL</label>
+      <input type="url" name="url" id="url">
+    </div>
+    <div>
+      <label for="color">Color</label>
+      <input type="color" name="color" id="color">
+    </div>
+    <div>
+      <label>
+        Password
+        <input type="password" name="password" required>
+      </label>
+    </div>
+    <button type="submit">Submit</button>
+  </form>
+
   <table id="results-table">
     <thead>
       <tr>
@@ -39,7 +164,6 @@
         <th>Gender</th>
         <th>Eye Color</th>
         <th>Bio</th>
-        <th>File</th>
         <th>Phone</th>
         <th>URL</th>
         <th>Color</th>
@@ -52,8 +176,10 @@
 
   <script>
     // Função para capturar os dados do formulário e gerar a tabela
-    function generateTable() {
-      var form = document.forms[0];
+    document.getElementById('data-form').addEventListener('submit', function(event) {
+      event.preventDefault(); // Impede o envio do formulário
+      
+      var form = this;
       var tableBody = document.querySelector('#results-table tbody');
       var newRow = tableBody.insertRow();
       
@@ -61,21 +187,14 @@
       newRow.insertCell().textContent = form.name.value;
       newRow.insertCell().textContent = form.email.value;
       newRow.insertCell().textContent = form.age.value;
-      newRow.insertCell().textContent = form.date.value;
-      newRow.insertCell().textContent = (form.banana.checked ? 'Banana ' : '') + (form.apple.checked ? 'Apple' : '');
-      newRow.insertCell().textContent = form.gender.value;
+      newRow.insertCell().textContent = form.birthdate.value;
+      newRow.insertCell().textContent = Array.from(form.querySelectorAll('input[name="favoriteFood"]:checked')).map(checkbox => checkbox.value).join(', ');
+      newRow.insertCell().textContent = form.querySelector('input[name="gender"]:checked').value;
       newRow.insertCell().textContent = Array.from(form.eyeColor.selectedOptions).map(option => option.value).join(', ');
       newRow.insertCell().textContent = form.bio.value;
-      newRow.insertCell().textContent = form.file.value.split('\\').pop(); // Exibe apenas o nome do arquivo, sem o caminho completo
       newRow.insertCell().textContent = form.phone.value;
       newRow.insertCell().textContent = form.url.value;
       newRow.insertCell().textContent = form.color.value;
-    }
-
-    // Chama a função para gerar a tabela quando o formulário for enviado
-    document.querySelector('form').addEventListener('submit', function(event) {
-      event.preventDefault(); // Impede o envio do formulário
-      generateTable(); // Chama a função para gerar a tabela
     });
   </script>
 </body>
