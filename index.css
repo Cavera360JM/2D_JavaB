@@ -1,0 +1,113 @@
+/* Estilo para o corpo da página */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+}
+
+/* Estilo para o cabeçalho do formulário */
+.form-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Estilo para o título do formulário */
+.form-title {
+  font-size: 24px;
+  color: #333;
+}
+
+/* Estilo para os campos do formulário */
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="date"],
+input[type="tel"],
+input[type="url"],
+input[type="color"],
+input[type="password"],
+textarea {
+  width: 100%;
+  padding: 12px;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* Estilo para os labels */
+label {
+  display: block;
+  margin-bottom: 6px;
+  color: #555;
+}
+
+/* Estilo para os botões */
+button[type="reset"],
+button[type="submit"] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: background-color 0.3s ease;
+}
+
+button[type="reset"] {
+  background-color: #f44336;
+}
+
+button[type="submit"] {
+  background-color: #4caf50;
+  color: white;
+}
+
+button[type="reset"]:hover {
+  background-color: #d32f2f;
+}
+
+button[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+/* Estilo para o rodapé do formulário */
+.form-footer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Estilo para os side links */
+.side-links {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+}
+
+.side-link {
+  display: block;
+  text-decoration: none;
+  color: #000;
+  margin-bottom: 10px;
+}
+
+.side-link-icon {
+  margin-right: 5px;
+}
+
+/* Estilo para os ícones de redes sociais */
+.side-link-youtube .side-link-icon {
+  color: red; /* Exemplo de cor para ícone do YouTube */
+}
+
+.side-link-github .side-link-icon {
+  color: black; /* Exemplo de cor para ícone do GitHub */
+}
+
+.side-link-twitter .side-link-icon {
+  color: blue; /* Exemplo de cor para ícone do Twitter */
+}
